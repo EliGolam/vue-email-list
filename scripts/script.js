@@ -15,15 +15,30 @@ const app = new Vue({
 
     methods: {
         // API methods
-        getEmailAPI() {
-            axios.get('https://flynn.boolean.careers/exercises/api/random/mail')
-                .then((serverData) => {
-                    if (serverData.status === 200 && serverData.data.success) {
-                        return serverData.data.response;
-                    }
-                }).catch((error) => {
-                    console.warn(error)
-                });
+        getEmailAPI(amount) {
+            // Check the parameter
+            amount = isNaN(amount) ? 1 : amount;
+
+            // Create an array of Promises
+            let promises = []; 
+
+            for (let i = 0; i < amount; i++) {
+                promises.push(
+                    axios
+                        .get('https://flynn.boolean.careers/exercises/api/random/mail')
+                        .then((response) => {
+                            if (response.data.success) {
+                                this.emailList.push(response.data.response);
+                            }
+                        })
+                        .catch((error) => {
+                            console.warn(error)
+                    })
+                )
+            }
+
+            // When all promises are resolved -> then execute
+            Promise.all(promises).then(() => this.exerciseResults = [...this.emailList]);
         },
 
         // Results in DOM Methods
@@ -46,16 +61,7 @@ const app = new Vue({
         console.log('DEBUG - results', this.exerciseResults);
         this.getEmailAPI();
         */ 
-
-        while (this.emailList.length < 10) {
-            const email = this.getEmailAPI();
-            console.log('DEBUG - new API email:', email);
-            this.emailList.push(email);
-        }
-
-        console.log('Created Email List:', this.emailList);
-
-        this.exerciseResults.push(...this.emailList);
+        this.getEmailAPI(10);
     }
 });
 
