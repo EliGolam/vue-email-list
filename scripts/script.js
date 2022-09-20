@@ -16,13 +16,14 @@ const app = new Vue({
     methods: {
         // API methods
         getEmailAPI() {
-            axios.get('https://flynn.boolean.careers/exercises/api/random/mail').then((serverData) => {
-                if (serverData.status === 200 && serverData.data.success) {
-                    return serverData.data.response;
-                }
-            }).catch((error) => {
-                console.warn(error)
-            });
+            axios.get('https://flynn.boolean.careers/exercises/api/random/mail')
+                .then((serverData) => {
+                    if (serverData.status === 200 && serverData.data.success) {
+                        return serverData.data.response;
+                    }
+                }).catch((error) => {
+                    console.warn(error)
+                });
         },
 
         // Results in DOM Methods
