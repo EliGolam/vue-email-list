@@ -1,1 +1,5 @@
-# live-coding-template
+# Practicing with API
+
+* VueJS
+* Axios
+* Bootstrap
