@@ -10,12 +10,14 @@ const app = new Vue({
 
         // Results
         exerciseResults:  [],
-        message: '',
+        loaded: true
     }, 
 
     methods: {
         // API methods
         getEmailAPI(amount) {
+            this.loaded = false;
+
             // Check the parameter
             amount = isNaN(amount) ? 1 : amount;
 
@@ -38,7 +40,10 @@ const app = new Vue({
             }
 
             // When all promises are resolved -> then execute
-            Promise.all(promises).then(() => this.exerciseResults = [...this.emailList]);
+            Promise.all(promises).then(() => {
+                this.exerciseResults = [...this.emailList];
+                this.loaded = true;
+            });
         },
 
         // Results in DOM Methods
@@ -61,7 +66,7 @@ const app = new Vue({
         console.log('DEBUG - results', this.exerciseResults);
         this.getEmailAPI();
         */ 
-        this.getEmailAPI(10);
+        this.getEmailAPI(100);
     }
 });
 
