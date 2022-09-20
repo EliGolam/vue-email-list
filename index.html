@@ -55,11 +55,12 @@
     <div id="app" class="container exercises">
         <div class="results-container row">
             <p
-                v-show="!loaded"
+                v-show="loading"
+                class="text-center"
             >Loading...</p>
             
             <p 
-                v-show="loaded"
+                v-show="!loading"
                 v-for="result in exerciseResults"
                 class="result col-12"
             >

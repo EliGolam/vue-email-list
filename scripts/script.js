@@ -7,42 +7,38 @@ const app = new Vue({
 
     data: {
         emailList: [],
+        emailURL: 'https://flynn.boolean.careers/exercises/api/random/mail',
 
         // Results
         exerciseResults:  [],
-        loaded: true
+        loading: false
     }, 
 
     methods: {
         // API methods
         getEmailAPI(amount) {
-            this.loaded = false;
+            this.loading = true; // Begin loading
 
-            // Check the parameter
-            amount = isNaN(amount) ? 1 : amount;
+            amount = isNaN(amount) ? 1 : amount; // Check the parameter
 
-            // Create an array of Promises
-            let promises = []; 
+            let promises = []; // Create an array of Promises
 
+
+            // Loop API calls
             for (let i = 0; i < amount; i++) {
                 promises.push(
                     axios
-                        .get('https://flynn.boolean.careers/exercises/api/random/mail')
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.emailList.push(response.data.response);
-                            }
-                        })
-                        .catch((error) => {
-                            console.warn(error)
-                    })
-                )
+                        .get(this.emailURL)
+                        .then(response => this.emailList.push(response.data.response))
+                        .catch((error) => console.warn(error))
+                );
             }
+
 
             // When all promises are resolved -> then execute
             Promise.all(promises).then(() => {
                 this.exerciseResults = [...this.emailList];
-                this.loaded = true;
+                this.loading = false;
             });
         },
 
